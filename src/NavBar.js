@@ -14,13 +14,19 @@ function NavBar(){
         Jobly
       </NavLink>
       <NavLink to='/companies'>
-        Jobly
+        Companies
       </NavLink>
       <NavLink to='/jobs'>
-        Jobly
+        Jobs
+      </NavLink>
+      <NavLink to='/login'>
+        Login
+      </NavLink>
+      <NavLink to='/signup'>
+        Signup
       </NavLink>
       <NavLink to='/profile'>
-        Jobly
+        Profile
       </NavLink>
       {/* <NavLink to='/logout'>
         Jobly

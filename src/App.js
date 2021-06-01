@@ -18,9 +18,9 @@ import NavBar from './NavBar'
 function App() {
   const [localUser, setLocalUser] = useState(null);
 
-  function loginUser() {}
-  function signUpUser() {}
-  function updateProfile() {}
+  function handleLogin() { }
+  function handleSignup() { }
+  function handleProfile() { }
 
   return (
     <div className="App">
@@ -89,5 +89,13 @@ export default App;
  *    ProfileUpdateForm               Manages updating profile form (reusuable from register form???)
  *      props: updateProfileFunction
  *
- *
+ */
+
+/**
+ * TODO:
+ * - Clean-up docstrings once state/props/heirachy is more clear
+ * - Flesh out components and related API static methods
+ * - Remember Keys on list items
+ * - Pass functions down
+ * - Add css
  */

@@ -1,5 +1,6 @@
 import React from 'react';
-import SearchForm from './SearchForm'
+import CompanyCard from './CompanyCard';
+// import SearchForm from './SearchForm'
 
 
 /**
@@ -11,10 +12,11 @@ import SearchForm from './SearchForm'
  * Routes --> CompanyList --> {SearchForm, CompanyCard}
  */
 function CompanyList() {
-return (
-  <div>
-    CompanyList
-  </div>
-)
+  return (
+    <div>
+      CompanyList
+      <CompanyCard companyInfo={{ name: 'company1' }} />
+    </div>
+  )
 }
 export default CompanyList;
