@@ -1,21 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CompanyCard from './CompanyCard';
-// import SearchForm from './SearchForm'
-
+import JoblyAPI from './JoblyAPI'
+import './CompanyList.css'
+import SearchForm from './SearchForm'
 
 /**
  * CompanyList
  * 
- * State: TBD
- * Props: None
+ * State: 
+ *  - companies:[{handle, name, descriptions, logoUrl, numEmployees}...]
+ * Props: handleSearch
  * 
  * Routes --> CompanyList --> {SearchForm, CompanyCard}
  */
 function CompanyList() {
+
+  const [companies, setCompanies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(null);
+
+  function handleSearch(search) {
+    setSearchTerm(search);
+  }
+
+  useEffect(function getCompanies(){
+    async function companiesAPI() {
+      let companyList = await JoblyAPI.getCompanies(searchTerm);
+      setCompanies(companyList);
+    }
+    companiesAPI()
+  },[searchTerm])
+
   return (
-    <div>
-      CompanyList
-      <CompanyCard companyInfo={{ name: 'company1' }} />
+    <div className='CompanyList'>
+      <SearchForm handleSearch={handleSearch}/>
+      {companies.map(company=> 
+      <CompanyCard key={company.handle} company={company}/>)}
     </div>
   )
 }

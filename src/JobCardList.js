@@ -1,20 +1,22 @@
 import React from 'react';
 import JobCard from './JobCard';
-
+import './JobCardList.css'
 
 /**
  * JobCardList
  * 
- * State: TBD
- * Props: search-term(optional) ** or company handle
+ * State: None
+ * Props: 
+ * - jobs: [{ id, title, salary, equity }, ...]
+ * 
  * 
  * {CompanyDetail, JobList} --> JobCardList --> JobCard
  */
-function JobCardList() {
+function JobCardList({jobs}) {
   return (
-    <div>
-      JobCardList
-      <JobCard JobInfo={{ title: 'job1' }} />
+    <div className='JobCardList'>
+      {jobs.map(job => 
+      <JobCard key={job.id} job={job} />)}
     </div>
   )
 }
