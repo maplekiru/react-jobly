@@ -10,7 +10,7 @@ import React from 'react';
  * JobCardList --> JobCard
  */
 function JobCard({ job }) {
-  const style = { width: '30rem',
+  const style = { width: '50rem',
   margin: '10px'}
   return (
       <div className="card" style={style}>

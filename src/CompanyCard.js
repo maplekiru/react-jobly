@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import './CompanyCard.css'
 
 /**
  * CompanyCard
@@ -11,19 +11,17 @@ import { Link } from 'react-router-dom';
  * CompanyList --> CompanyCard
  */
 function CompanyCard({ company }) {
-  const style = {width: '30rem',
+  const style = {width: '50rem',
 margin: '10px'}
   return (
     <div>
-        <div className="card" style={style}>
+        <a className="card CompanyCard" href={`./companies/${company.handle}`} style={style}>
           <div className="card-body">
-          <Link to={`./companies/${company.handle}`}>
             <h5 className="card-title">{company.name}</h5>
-            </Link>
             <p className="card-text">{company.description}</p>
             <img className="card-image" src={company.src} alt=''/>
           </div>
-        </div>
+        </a>
       
     </div>
   )

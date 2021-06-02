@@ -1,0 +1,8 @@
+.CompanyCard {
+    text-decoration: none;
+    color: inherit;
+}
+
+.CompanyCard:hover {
+    box-shadow: 0 0 2px;
+}
