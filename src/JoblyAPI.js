@@ -37,7 +37,7 @@ class JoblyApi {
   /** Get details on a company by handle. */
 
   static async getCompany(handle) {
-    let res = await this.request(`companies/${handle}`);
+    const res = await this.request(`companies/${handle}`);
     return res.company;
   }
   
@@ -45,14 +45,20 @@ class JoblyApi {
 
   /** Get all companies or companies that match query */
   static async getCompanies(name) {
-    let res = await this.request(`companies`, {name});
+    const res = await this.request(`companies`, {name});
     return res.companies;
   }
 
   /** Get all Jobs or jobs that match query */
   static async getJobs(title) {
-    let res = await this.request(`jobs`, {title});
+    const res = await this.request(`jobs`, {title});
     return res.jobs;
+  }
+
+  /** Get all Jobs or jobs that match query */
+  static async login(loginData) {
+    const res = await this.request(`jobs`, loginData, 'post');
+    return res.token;
   }
   
 }

@@ -4,38 +4,49 @@ import JobCardList from './JobCardList';
 import JoblyAPI from './JoblyAPI'
 
 import './CompanyDetail.css'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 /**
  * CompanyDetail
  * 
- * State: None
+ * State: 
+ *  - {handle, name, description, logoUrl, numEmployees}
  * Props: None
  * 
  * Routes --> CompanyDetail --> JobCardList
  */
 function CompanyDetail() {
   const [company, setCompany] = useState(null);
+  const [isApiError, setIsApiError] = useState(false) 
   const { name } = useParams();
-
+  
   useEffect(function getCompany() {
-    async function CompanyAPI() {
+    async function fetchCompanyAPI() {
       try {
         const companyInfo = await JoblyAPI.getCompany(name);
         setCompany(companyInfo)
       } catch {
-        <Redirect to='/companies' />
-      }
+        setIsApiError(true);
+      } 
     }
-    CompanyAPI();
+    fetchCompanyAPI();
   }, [name])
+
+  if(isApiError) return <Redirect to='/companies'/>
 
   function renderCompanyInfo() {
     return (
-      <div className='CompanyDetail'>
-        <h3>{name} </h3>
-        <h6> {company.description} </h6>
-        <JobCardList jobs={company.jobs} />
-      </div>
+      <Container>
+        <Row>
+          <Col className='CompanyDetail'>
+            <h3>{name} </h3>
+            <h6> {company.description} </h6>
+            <JobCardList jobs={company.jobs} />
+          </Col>
+        </Row>
+      </Container>
     )
   }
 

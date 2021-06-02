@@ -7,14 +7,14 @@ import JobList from './JobList';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import ProfileForm from './ProfileForm';
-
+// TODO: update docstrings for functions / authentication
 /**
  * Routes
  * 
  * App --> Routes --> {HomePage, CompanyList, CompanyDetail
  *                     JobList, LoginForm, SignupForm, ProfileForm}
  */
-function Routes() {
+function Routes({handleSignup, handleLogin, handleProfile}) {
 
   return (
       <Switch>
@@ -31,10 +31,10 @@ function Routes() {
           <JobList/>
         </Route>
         <Route exact path='/login'>
-          <LoginForm/>
+          <LoginForm handleLogin={handleLogin}/>
         </Route>
         <Route exact path='/signup'>
-          <SignupForm/>
+          <SignupForm handleSignup={handleSignup}/>
         </Route>
         <Route exact path='/profile'>
           <ProfileForm/>

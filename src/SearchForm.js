@@ -1,4 +1,7 @@
 import { React, useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
 /**
  * SearchForm
  * 
@@ -10,38 +13,37 @@ import { React, useState } from 'react';
 
 function SearchForm({ handleSearch }) {
 
-  const [formData, setFormData] = useState({ search: '' });
+  const [searchTerm, setSearchTerm] = useState('');
 
   /** Update form input. */
   function handleChange(evt) {
-    const { name, value } = evt.target;
-    setFormData(fData => ({
-      ...fData,
-      [name]: value,
-    }));
+    const { value } = evt.target;
+    setSearchTerm(value);
   }
 
   /** Call parent function and clear form. */
   function handleSubmit(evt) {
     evt.preventDefault();
-    handleSearch(formData.search || null);
+    handleSearch(searchTerm.trim() || null);
   }
-
   return (
-    <form className='form-inline' onSubmit={handleSubmit}>
-      <div className='input-group mb-3'>
-        <input
+    <Form onSubmit={handleSubmit}>
+      <InputGroup>
+        <Form.Control
           id="search"
+          type="text"
           name="search"
           placeholder="search"
           onChange={handleChange}
-          value={formData.search}
+          value={searchTerm}
           aria-label="Search"
-          className='form-control'
         />
-        <button className='btn btn-primary'>Search!</button>
-      </div>
-    </form>
+        <InputGroup.Append>
+          <Button variant='primary' type='submit'> Search!</Button>
+        </InputGroup.Append>
+      </InputGroup>
+
+    </Form>
   )
 }
 

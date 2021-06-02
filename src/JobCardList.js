@@ -1,6 +1,8 @@
 import React from 'react';
 import JobCard from './JobCard';
+import Container from 'react-bootstrap/Container';
 import './JobCardList.css'
+
 
 /**
  * JobCardList
@@ -14,10 +16,10 @@ import './JobCardList.css'
  */
 function JobCardList({jobs}) {
   return (
-    <div className='JobCardList'>
+    <Container className='JobCardList'>
       {jobs.map(job => 
       <JobCard key={job.id} job={job} />)}
-    </div>
+    </Container>
   )
 }
 export default JobCardList;

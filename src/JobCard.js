@@ -1,9 +1,10 @@
 import React from 'react';
+import Card from 'react-bootstrap/Card'
 
 /**
  * JobCard
  * 
- * State: TBD
+ * State: None
  * Props: 
  * - job: { id, title, salary, equity }
  * 
@@ -13,13 +14,13 @@ function JobCard({ job }) {
   const style = { width: '50rem',
   margin: '10px'}
   return (
-      <div className="card" style={style}>
-          <div className="card-body">
-            <h5 className="card-title">{job.title}</h5>
-            <p className="card-text">Salary: ${job.salary}</p>
-            <p className="card-text">Equity: {job.Equity || '0'}</p>
-          </div>
-        </div>
+      <Card style={style}>
+          <Card.Body>
+            <Card.Title>{job.title}</Card.Title>
+            <Card.Text>Salary: ${job.salary}</Card.Text>
+            <Card.Text>Equity: {job.equity || '0'}</Card.Text>
+          </Card.Body>
+        </Card>
   )
 }
 export default JobCard;

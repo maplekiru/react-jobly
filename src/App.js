@@ -1,8 +1,10 @@
 import { BrowserRouter } from 'react-router-dom';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 import Routes from './Routes'
 import NavBar from './NavBar'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import JoblyApi from './JoblyAPI';
 
 /**
  * App
@@ -17,16 +19,43 @@ import NavBar from './NavBar'
 
 function App() {
   const [localUser, setLocalUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [isApiError, setIsApiError] = useState(false);
 
-  function handleLogin() { }
+  /** Accepts loginData {username, password}
+   * Returns Token if authenticated
+   */
+  function handleLogin(loginData) {
+    async function fetchLoginAPI() {
+      try {
+        const apiToken = await JoblyApi.login(loginData);
+        setToken(apiToken);
+      } catch {
+        setIsApiError(true);
+      }
+    }
+    fetchLoginAPI()
+  }
+
+  useEffect(function updateJoblyAPIToken(){
+    JoblyApi.token = token;
+    if(token) setLocalUser(true) // TODO: For testing, update to fetch actual user
+  },[token])
+
   function handleSignup() { }
   function handleProfile() { }
+
+  if (isApiError) return <div>API Error</div>; //TODO: Update with Alert Component
 
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar />
-        <Routes />
+        <NavBar localUser={localUser} />
+        <Routes
+          handleLogin={handleLogin}
+          handleSignup={handleSignup}
+          handleProfile={handleProfile}
+          localUser={localUser} />
       </BrowserRouter>
     </div>
   );

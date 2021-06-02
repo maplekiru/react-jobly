@@ -9,10 +9,11 @@ import React from 'react';
  * 
  * Routes --> Homepage
  */
-function Homepage() {
+function Homepage({localUser}) {
 return (
   <div>
-    HomePage
+    {localUser ? <h1> Welcome {localUser.username} </h1>
+    : <h1>HomePage </h1>}
   </div>
 )
 }

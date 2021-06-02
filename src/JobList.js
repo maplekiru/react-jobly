@@ -3,17 +3,23 @@ import JobCardList from './JobCardList';
 import JoblyAPI from './JoblyAPI'
 import SearchForm from './SearchForm'
 import './JobList.css'
+import Container from 'react-bootstrap/Container';
+import {Redirect} from 'react-router-dom';
+
 
 /**
  * JobList
  * 
- * State: TBD
- * Props: handleSearch
+ * State: 
+ * - jobs: [{ id, title, salary, equity }, ...]
+ * - searchTerm: ''
+ * Props: None
  * 
  * Routes --> JobList --> {SearchForm, JobCardList}
  */
 function JobList() {
   const [jobs, setJobs] = useState([]);
+  const [isApiError, setIsApiError] = useState(false) 
   const [searchTerm, setSearchTerm] = useState(null);
 
   function handleSearch(search) {
@@ -21,18 +27,24 @@ function JobList() {
   }
 
   useEffect(function getJobs(){
-    async function jobsAPI() {
-      let jobList = await JoblyAPI.getJobs(searchTerm);
+    async function fetchJobsAPI() {
+      try {
+      const jobList = await JoblyAPI.getJobs(searchTerm);
       setJobs(jobList);
+      } catch {
+        setIsApiError(true);
+      }
     }
-    jobsAPI()
+    fetchJobsAPI() //
   },[searchTerm])
 
+  if(isApiError) return <Redirect to='/'/>
+
   return (
-    <div className='JobList'>
+    <Container className='JobList'>
       <SearchForm handleSearch={handleSearch}/>
       <JobCardList jobs={jobs} />
-    </div>
+    </Container>
   )
 }
 export default JobList;

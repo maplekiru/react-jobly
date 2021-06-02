@@ -3,12 +3,15 @@ import CompanyCard from './CompanyCard';
 import JoblyAPI from './JoblyAPI'
 import './CompanyList.css'
 import SearchForm from './SearchForm'
+import Container from 'react-bootstrap/Container';
+import {Redirect} from 'react-router-dom';
 
 /**
  * CompanyList
  * 
  * State: 
  *  - companies:[{handle, name, descriptions, logoUrl, numEmployees}...]
+ *  - searchTerm: ''
  * Props: handleSearch
  * 
  * Routes --> CompanyList --> {SearchForm, CompanyCard}
@@ -16,26 +19,33 @@ import SearchForm from './SearchForm'
 function CompanyList() {
 
   const [companies, setCompanies] = useState([]);
+  const [isApiError, setIsApiError] = useState(false)
   const [searchTerm, setSearchTerm] = useState(null);
 
   function handleSearch(search) {
     setSearchTerm(search);
   }
 
-  useEffect(function getCompanies(){
-    async function companiesAPI() {
-      let companyList = await JoblyAPI.getCompanies(searchTerm);
-      setCompanies(companyList);
+  useEffect(function getCompanies() {
+    async function fetchCompaniesAPI() {
+      try {
+        const companyList = await JoblyAPI.getCompanies(searchTerm);
+        setCompanies(companyList);
+      } catch {
+        setIsApiError(true);
+      }
     }
-    companiesAPI()
-  },[searchTerm])
+    fetchCompaniesAPI()
+  }, [searchTerm])
+
+  if(isApiError) return <Redirect to='/'/>
 
   return (
-    <div className='CompanyList'>
-      <SearchForm handleSearch={handleSearch}/>
-      {companies.map(company=> 
-      <CompanyCard key={company.handle} company={company}/>)}
-    </div>
+    <Container className='CompanyList'>
+      <SearchForm handleSearch={handleSearch} />
+      {companies.map(company =>
+        <CompanyCard key={company.handle} company={company} />)}
+    </Container>
   )
 }
 export default CompanyList;
