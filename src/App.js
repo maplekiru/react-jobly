@@ -5,11 +5,17 @@ import Routes from './Routes'
 import NavBar from './NavBar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import JoblyApi from './JoblyAPI';
+import CurrentUserContext from "./CurrentUserContext";
+const jwt = require("jsonwebtoken");
 
 /**
  * App
  * 
- * State: localUser
+ * State: 
+ *  - currentUser: { username, firstName, lastName, isAdmin, jobs }
+ *    where jobs is [{ id, title, companyHandle, companyName, state }, ...]
+ *  - token
+ *  - isApiError
  * 
  * functions: loginUser, signUpUser, updateProfile
  * 
@@ -18,44 +24,75 @@ import JoblyApi from './JoblyAPI';
  */
 
 function App() {
-  const [localUser, setLocalUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [isApiError, setIsApiError] = useState(false);
+
+  console.log("Current User: ", currentUser)
+
+
 
   /** Accepts loginData {username, password}
    * Returns Token if authenticated
    */
-  function handleLogin(loginData) {
-    async function fetchLoginAPI() {
-      try {
-        const apiToken = await JoblyApi.login(loginData);
-        setToken(apiToken);
-      } catch {
-        setIsApiError(true);
-      }
+  async function handleLogin(formData) {
+    try {
+      const apiToken = await JoblyApi.login(formData);
+      setToken(apiToken);
+      return { success: true, errors: null }
+    } catch (errors) {
+      return { success: false, errors: errors }
     }
-    fetchLoginAPI()
   }
 
-  useEffect(function updateJoblyAPIToken(){
-    JoblyApi.token = token;
-    if(token) setLocalUser(true) // TODO: For testing, update to fetch actual user
-  },[token])
+  useEffect(function updateCurrentUser() {
+    async function fetchCurrentUser() {
+      if (token) {
+        try {
+          const { username } = jwt.decode(token)
+          JoblyApi.token = token;
+          const localUser = await JoblyApi.getUser(username)
+          setCurrentUser(localUser);
+        }
+        catch {
+          setCurrentUser(null);
+        }
+      }
+    }
+    fetchCurrentUser();
+  }, [token])
 
-  function handleSignup() { }
+  /** Accepts loginData {username, password}
+   * Returns Token if authenticated
+   */
+  async function handleSignup(formData) {
+    try {
+      const apiToken = await JoblyApi.registerUser(formData);
+      setToken(apiToken);
+      return { success: true, errors: null }
+    } catch (errors) {
+      return { success: false, errors: errors }
+    }
+  }
+
+  /** Removes token and currentUser from state */
+  function handleLogout() {
+    setCurrentUser(null);
+    setToken(null);
+  }
+
   function handleProfile() { }
-
-  if (isApiError) return <div>API Error</div>; //TODO: Update with Alert Component
 
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar localUser={localUser} />
-        <Routes
-          handleLogin={handleLogin}
-          handleSignup={handleSignup}
-          handleProfile={handleProfile}
-          localUser={localUser} />
+        <CurrentUserContext.Provider value={currentUser}>
+          <NavBar handleLogout={handleLogout} />
+          <Routes
+            handleLogin={handleLogin}
+            handleSignup={handleSignup}
+            handleProfile={handleProfile}
+          />
+        </CurrentUserContext.Provider>
       </BrowserRouter>
     </div>
   );
@@ -122,9 +159,12 @@ export default App;
 
 /**
  * TODO:
- * - Clean-up docstrings once state/props/heirachy is more clear
+ * - Add token to localStorage
+ * - Protect routes using Context of currentUser
  * - Flesh out components and related API static methods
- * - Remember Keys on list items
- * - Pass functions down
- * - Add css
+ * - Add update Profile functionality
+ * - Deploy
+ * - Clean-up docStrings once state/props/hierarchy
+ * - Add Loading message during API calls
+ * - Add Alerts
  */

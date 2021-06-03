@@ -1,15 +1,17 @@
 import { React, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Container } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert'
 
 
 const initialFormData = {
-  firstName: '',
-  lastName: '',
-  username: '',
-  password: '',
-  email: ''
+  firstName: 'k',
+  lastName: 'r',
+  username: 'testkiru',
+  password: 'password',
+  email: 'k@r.com'
 }
 /**
  * SignupForm
@@ -20,8 +22,11 @@ const initialFormData = {
  * Routes --> SignupForm --> Alert
  */
 function SignupForm({ handleSignup }) {
-  
+
   const [formData, setFormData] = useState(initialFormData);
+  const [signupError, setSignupError] = useState(null);
+
+  const history = useHistory();
 
   /** Update form input. */
   function handleChange(evt) {
@@ -33,12 +38,19 @@ function SignupForm({ handleSignup }) {
   }
 
   /** Call parent function and clear form. */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    handleSignup(formData);
+    const signupResult = await handleSignup(formData);
+    if (signupResult.success) {
+      history.push('/');
+    }
+    else {
+      setSignupError(signupResult.errors)
+    }
   }
   return (
     <Container>
+      {signupError && <Alert variant='danger'> {signupError}</Alert>} 
       <h2>Sign Up</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="username">

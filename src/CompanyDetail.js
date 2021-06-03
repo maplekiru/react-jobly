@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import JobCardList from './JobCardList';
 import JoblyAPI from './JoblyAPI'
+import Alert from 'react-bootstrap/Alert'
 
 import './CompanyDetail.css'
 import Container from 'react-bootstrap/Container';
@@ -34,7 +35,7 @@ function CompanyDetail() {
     fetchCompanyAPI();
   }, [name])
 
-  if(isApiError) return <Redirect to='/companies'/>
+  if (isApiError) return <Alert variant='danger'> API Error </Alert>;
 
   function renderCompanyInfo() {
     return (

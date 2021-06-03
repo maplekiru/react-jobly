@@ -11,6 +11,8 @@ import ProfileForm from './ProfileForm';
 /**
  * Routes
  * 
+ * Props: handleSignUp, handleLogin, handleProfile
+ * 
  * App --> Routes --> {HomePage, CompanyList, CompanyDetail
  *                     JobList, LoginForm, SignupForm, ProfileForm}
  */
@@ -37,7 +39,7 @@ function Routes({handleSignup, handleLogin, handleProfile}) {
           <SignupForm handleSignup={handleSignup}/>
         </Route>
         <Route exact path='/profile'>
-          <ProfileForm/>
+          <ProfileForm handleProfile={handleProfile}/>
         </Route>
         <Redirect to='/' />
       </Switch>

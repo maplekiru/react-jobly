@@ -4,7 +4,7 @@ import JoblyAPI from './JoblyAPI'
 import SearchForm from './SearchForm'
 import './JobList.css'
 import Container from 'react-bootstrap/Container';
-import {Redirect} from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert'
 
 
 /**
@@ -35,10 +35,10 @@ function JobList() {
         setIsApiError(true);
       }
     }
-    fetchJobsAPI() //
+    fetchJobsAPI()
   },[searchTerm])
 
-  if(isApiError) return <Redirect to='/'/>
+  if (isApiError) return <Alert variant='danger'> API Error </Alert>;
 
   return (
     <Container className='JobList'>

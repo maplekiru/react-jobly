@@ -1,11 +1,13 @@
 import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Container } from 'react-bootstrap';
+import  Container  from 'react-bootstrap/Container';
+import { useHistory } from 'react-router-dom'
+import Alert from 'react-bootstrap/Alert'
 
 const initialFormData = {
-  username: '',
-  password: '',
+  username: 'testuser',
+  password: 'password',
 }
 /**
  * LoginForm
@@ -15,8 +17,11 @@ const initialFormData = {
  * 
  * Routes --> LoginForm --> Alert
  */
-function LoginForm({handleLogin}) {
+function LoginForm({ handleLogin }) {
   const [formData, setFormData] = useState(initialFormData);
+  const [loginError, setLoginError] = useState(null)
+
+  const history = useHistory();
 
   /** Update form input. */
   function handleChange(evt) {
@@ -28,12 +33,20 @@ function LoginForm({handleLogin}) {
   }
 
   /** Call parent function and clear form. */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    handleLogin(formData);
+    const loginResult = await handleLogin(formData);
+    if (loginResult.success) {
+      history.push('/');
+    }
+    else {
+      setLoginError(loginResult.errors)
+    }
+
   }
   return (
     <Container>
+      {loginError && <Alert variant='danger'> {loginError}</Alert>} 
       <h2>Login</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="username">

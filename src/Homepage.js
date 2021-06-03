@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import CurrentUserContext from './CurrentUserContext';
 
 
 /**
@@ -9,10 +10,11 @@ import React from 'react';
  * 
  * Routes --> Homepage
  */
-function Homepage({localUser}) {
+function Homepage() {
+  const currentUser = useContext(CurrentUserContext)
 return (
   <div>
-    {localUser ? <h1> Welcome {localUser.username} </h1>
+    {currentUser ? <h1> Welcome {currentUser.username} </h1>
     : <h1>HomePage </h1>}
   </div>
 )
