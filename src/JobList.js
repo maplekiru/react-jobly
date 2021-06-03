@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import JobCardList from './JobCardList';
 import JoblyAPI from './JoblyAPI'
 import SearchForm from './SearchForm'
 import './JobList.css'
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert'
+import CurrentUserContext from './CurrentUserContext'
 
 
 /**
@@ -19,8 +20,10 @@ import Alert from 'react-bootstrap/Alert'
  */
 function JobList() {
   const [jobs, setJobs] = useState([]);
-  const [isApiError, setIsApiError] = useState(false) 
+  const [apiError, setApiError] = useState(false) 
   const [searchTerm, setSearchTerm] = useState(null);
+
+  const currentUser = useContext(CurrentUserContext)
 
   function handleSearch(search) {
     setSearchTerm(search);
@@ -32,13 +35,14 @@ function JobList() {
       const jobList = await JoblyAPI.getJobs(searchTerm);
       setJobs(jobList);
       } catch {
-        setIsApiError(true);
+        setApiError(true);
       }
     }
     fetchJobsAPI()
   },[searchTerm])
-
-  if (isApiError) return <Alert variant='danger'> API Error </Alert>;
+  
+  if (!currentUser) return <Alert variant='warning'> Please login in to view page </Alert>
+  if (apiError) return <Alert variant='danger'> {apiError} </Alert>;
 
   return (
     <Container className='JobList'>

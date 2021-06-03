@@ -21,7 +21,7 @@ import CurrentUserContext from './CurrentUserContext';
 function CompanyList() {
 
   const [companies, setCompanies] = useState([]);
-  const [isApiError, setIsApiError] = useState(false)
+  const [apiError, setApiError] = useState(null)
   const [searchTerm, setSearchTerm] = useState(null);
 
   const currentUser = useContext(CurrentUserContext)
@@ -35,14 +35,15 @@ function CompanyList() {
       try {
         const companyList = await JoblyAPI.getCompanies(searchTerm);
         setCompanies(companyList);
-      } catch {
-        setIsApiError(true);
+      } catch(err) {
+        setApiError(err);
       }
     }
     fetchCompaniesAPI()
   }, [searchTerm])
-  if (!currentUser) return <Alert variant='warning'> Must be logged in to view page </Alert>
-  if (isApiError) return <Alert variant='danger'> API Error </Alert>;
+
+  if (!currentUser) return <Alert variant='warning'> Please login in to view page </Alert>
+  if (apiError) return <Alert variant='danger'> {apiError} </Alert>;
 
   return (
     <Container className='CompanyList'>

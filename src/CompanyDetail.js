@@ -21,7 +21,7 @@ import Col from 'react-bootstrap/Col';
  */
 function CompanyDetail() {
   const [company, setCompany] = useState(null);
-  const [isApiError, setIsApiError] = useState(false) 
+  const [apiError, setApiError] = useState(null); 
   const { name } = useParams();
 
   const currentUser = useContext(CurrentUserContext)
@@ -31,16 +31,15 @@ function CompanyDetail() {
       try {
         const companyInfo = await JoblyAPI.getCompany(name);
         setCompany(companyInfo)
-      } catch {
-        setIsApiError(true);
+      } catch (err) {
+        setApiError(err);
       } 
     }
     fetchCompanyAPI();
   }, [name])
 
-  if (!currentUser) return <Alert variant='warning'> Must be logged in to view page </Alert>
-
-  if (isApiError) return <Alert variant='danger'> API Error </Alert>;
+  if (!currentUser) return <Alert variant='warning'> Please login in to view page </Alert>
+  if (apiError) return <Alert variant='danger'> {apiError} </Alert>;
 
   function renderCompanyInfo() {
     return (

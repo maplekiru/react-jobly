@@ -1,4 +1,4 @@
-import { BrowserRouter, useHistory} from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import './App.css';
 import Routes from './Routes'
@@ -27,7 +27,7 @@ const initialToken = localStorage.getItem('joblyToken') || null;
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(initialToken);
-  
+
   /** Accepts loginData {username, password}
    * Returns Token if authenticated
    */
@@ -40,26 +40,26 @@ function App() {
       return { success: false, errors: errors }
     }
   }
-  
+
   /** Removes token and currentUser from state */
   function handleLogout() {
     setCurrentUser(null);
     setToken(null);
     localStorage.removeItem('joblyToken')
   }
-    /** Accepts loginData {username, password}
-     * Returns token if authenticated
-     */
-    async function handleSignup(formData) {
-      try {
-        const apiToken = await JoblyApi.registerUser(formData);
-        setToken(apiToken);
-        return { success: true, errors: null }
-      } catch (errors) {
-        return { success: false, errors: errors }
-      }
+  /** Accepts loginData {username, password}
+   * Returns token if authenticated
+   */
+  async function handleSignup(formData) {
+    try {
+      const apiToken = await JoblyApi.registerUser(formData);
+      setToken(apiToken);
+      return { success: true, errors: null }
+    } catch (errors) {
+      return { success: false, errors: errors }
     }
-  
+  }
+
   useEffect(function updateCurrentUser() {
     async function fetchCurrentUser() {
       if (token) {
