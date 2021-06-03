@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useHistory} from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import './App.css';
 import Routes from './Routes'
@@ -8,6 +8,8 @@ import JoblyApi from './JoblyAPI';
 import CurrentUserContext from "./CurrentUserContext";
 const jwt = require("jsonwebtoken");
 
+
+const initialToken = localStorage.getItem('joblyToken') || null;
 /**
  * App
  * 
@@ -22,15 +24,10 @@ const jwt = require("jsonwebtoken");
  * App --> {Routes, NavBar} --> {HomePage, CompanyList, CompanyDetail
  *                     JobList, LoginForm, SignupForm, ProfileForm}
  */
-
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [token, setToken] = useState(null);
-
-  console.log("Current User: ", currentUser)
-
-
-
+  const [token, setToken] = useState(initialToken);
+  
   /** Accepts loginData {username, password}
    * Returns Token if authenticated
    */
@@ -43,14 +40,34 @@ function App() {
       return { success: false, errors: errors }
     }
   }
-
+  
+  /** Removes token and currentUser from state */
+  function handleLogout() {
+    setCurrentUser(null);
+    setToken(null);
+    localStorage.removeItem('joblyToken')
+  }
+    /** Accepts loginData {username, password}
+     * Returns token if authenticated
+     */
+    async function handleSignup(formData) {
+      try {
+        const apiToken = await JoblyApi.registerUser(formData);
+        setToken(apiToken);
+        return { success: true, errors: null }
+      } catch (errors) {
+        return { success: false, errors: errors }
+      }
+    }
+  
   useEffect(function updateCurrentUser() {
     async function fetchCurrentUser() {
       if (token) {
         try {
           const { username } = jwt.decode(token)
           JoblyApi.token = token;
-          const localUser = await JoblyApi.getUser(username)
+          localStorage.setItem('joblyToken', token);
+          const localUser = await JoblyApi.getUser(username);
           setCurrentUser(localUser);
         }
         catch {
@@ -61,24 +78,6 @@ function App() {
     fetchCurrentUser();
   }, [token])
 
-  /** Accepts loginData {username, password}
-   * Returns Token if authenticated
-   */
-  async function handleSignup(formData) {
-    try {
-      const apiToken = await JoblyApi.registerUser(formData);
-      setToken(apiToken);
-      return { success: true, errors: null }
-    } catch (errors) {
-      return { success: false, errors: errors }
-    }
-  }
-
-  /** Removes token and currentUser from state */
-  function handleLogout() {
-    setCurrentUser(null);
-    setToken(null);
-  }
 
   function handleProfile() { }
 

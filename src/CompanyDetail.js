@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom'
 import JobCardList from './JobCardList';
 import JoblyAPI from './JoblyAPI'
 import Alert from 'react-bootstrap/Alert'
+import CurrentUserContext from './CurrentUserContext'
 
 import './CompanyDetail.css'
 import Container from 'react-bootstrap/Container';
@@ -22,6 +23,8 @@ function CompanyDetail() {
   const [company, setCompany] = useState(null);
   const [isApiError, setIsApiError] = useState(false) 
   const { name } = useParams();
+
+  const currentUser = useContext(CurrentUserContext)
   
   useEffect(function getCompany() {
     async function fetchCompanyAPI() {
@@ -34,6 +37,8 @@ function CompanyDetail() {
     }
     fetchCompanyAPI();
   }, [name])
+
+  if (!currentUser) return <Alert variant='warning'> Must be logged in to view page </Alert>
 
   if (isApiError) return <Alert variant='danger'> API Error </Alert>;
 

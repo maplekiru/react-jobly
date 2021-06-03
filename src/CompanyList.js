@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CompanyCard from './CompanyCard';
 import JoblyAPI from './JoblyAPI'
 import './CompanyList.css'
 import SearchForm from './SearchForm'
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert'
+
+import CurrentUserContext from './CurrentUserContext';
 
 /**
  * CompanyList
@@ -22,6 +24,8 @@ function CompanyList() {
   const [isApiError, setIsApiError] = useState(false)
   const [searchTerm, setSearchTerm] = useState(null);
 
+  const currentUser = useContext(CurrentUserContext)
+
   function handleSearch(search) {
     setSearchTerm(search);
   }
@@ -37,7 +41,7 @@ function CompanyList() {
     }
     fetchCompaniesAPI()
   }, [searchTerm])
-
+  if (!currentUser) return <Alert variant='warning'> Must be logged in to view page </Alert>
   if (isApiError) return <Alert variant='danger'> API Error </Alert>;
 
   return (

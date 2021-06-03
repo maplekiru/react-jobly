@@ -42,7 +42,6 @@ function LoginForm({ handleLogin }) {
     else {
       setLoginError(loginResult.errors)
     }
-
   }
   return (
     <Container>
