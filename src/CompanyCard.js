@@ -13,11 +13,11 @@ import './CompanyCard.css'
  * CompanyList --> CompanyCard
  */
 function CompanyCard({ company }) {
-  const style = {width: '50rem',
+  const style = {width: '40rem',
 margin: '10px'}
   return (
-        <Card style={style}>
-          <Link className='CompanyCard' to={`./companies/${company.handle}`}>
+        <Card className='CompanyCard' style={style}>
+          <Link  to={`./companies/${company.handle}`}>
           <Card.Body>
             <Card.Title>{company.name}</Card.Title>
             <Card.Text>{company.description}</Card.Text>

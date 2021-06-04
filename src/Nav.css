@@ -1,0 +1,25 @@
+.NavBar {
+    margin-bottom: 10px;
+}
+.NavBar a {
+    color: white;
+    text-decoration: none;  
+ }
+.NavBar a.active {
+    color:tomato;
+}
+.NavBar a:hover {
+    color:tomato;
+    text-decoration: none;
+}
+
+.NavBar button {
+    color: white;
+    text-decoration: none;  
+ }
+
+.NavBar button:hover {
+    color:tomato;
+    text-decoration: none;
+}
+

@@ -2,6 +2,7 @@ import { React, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
+import './SearchForm.css'
 /**
  * SearchForm
  * 
@@ -27,8 +28,8 @@ function SearchForm({ handleSearch }) {
     handleSearch(searchTerm.trim() || null);
   }
   return (
-    <Form onSubmit={handleSubmit}>
-      <InputGroup>
+    <Form className='search-form' onSubmit={handleSubmit}>
+      <InputGroup size='lg'>
         <Form.Control
           id="search"
           type="text"

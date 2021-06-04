@@ -1,0 +1,12 @@
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.profile-form {
+    background-color:whitesmoke;
+    padding: 5px;
+    width: 30rem;
+    
+}

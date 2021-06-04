@@ -1,9 +1,11 @@
-import { React, useState } from 'react';
+import { React, useContext, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import  Container  from 'react-bootstrap/Container';
-import { useHistory } from 'react-router-dom'
+import Container from 'react-bootstrap/Container';
+import { useHistory, Redirect } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert'
+import CurrentUserContext from './CurrentUserContext'
+import './LoginForm.css'
 
 const initialFormData = {
   username: 'testuser',
@@ -19,9 +21,12 @@ const initialFormData = {
  */
 function LoginForm({ handleLogin }) {
   const [formData, setFormData] = useState(initialFormData);
-  const [loginError, setLoginError] = useState(null)
+  const [errors, setErrors] = useState(null)
 
+  const currentUser = useContext(CurrentUserContext)
   const history = useHistory();
+
+  console.log("Login Form", currentUser)
 
   /** Update form input. */
   function handleChange(evt) {
@@ -40,14 +45,18 @@ function LoginForm({ handleLogin }) {
       history.push('/');
     }
     else {
-      setLoginError(loginResult.errors)
+      setErrors(loginResult.errors)
     }
   }
+
+  if (currentUser) return <Redirect to='/' />
+
   return (
-    <Container>
-      {loginError && <Alert variant='danger'> {loginError}</Alert>} 
+    <Container className='login-container'>
+      {errors && errors.map((error, idx) => (
+        <Alert key={idx} variant='danger'> {error} </Alert>))}
       <h2>Login</h2>
-      <Form onSubmit={handleSubmit}>
+      <Form className='login-form' onSubmit={handleSubmit}>
         <Form.Group controlId="username">
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -70,7 +79,7 @@ function LoginForm({ handleLogin }) {
             required={true}
           />
         </Form.Group>
-        <Button variant='primary' type='submit'> Submit!</Button>
+        <Button variant='primary' type='submit'> Submit</Button>
       </Form>
     </Container>
   )

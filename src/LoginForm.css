@@ -1,0 +1,12 @@
+.login-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.login-form {
+    background-color:whitesmoke;
+    padding: 5px;
+    width: 30rem;
+    
+}

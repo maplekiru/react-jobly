@@ -2,10 +2,12 @@ import { BrowserRouter } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import './App.css';
 import Routes from './Routes'
-import NavBar from './NavBar'
+import Nav from './Nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import JoblyApi from './JoblyAPI';
 import CurrentUserContext from "./CurrentUserContext";
+import ApplyJobContext from "./ApplyJobContext";
+import Spinner from 'react-bootstrap/Spinner';
 const jwt = require("jsonwebtoken");
 
 
@@ -22,18 +24,21 @@ const initialToken = localStorage.getItem('joblyToken') || null;
  * functions: loginUser, signUpUser, updateProfile
  * 
  * App --> {Routes, NavBar} --> {HomePage, CompanyList, CompanyDetail
- *                     JobList, LoginForm, SignupForm, ProfileForm}
- */
+ *                     JobList, LoginForm, SignupForm, ProfileForm} */
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(initialToken);
 
+  const initialLoading = initialToken ? true : false;
+  const [isUserLoading, setIsUserLoading] = useState(initialLoading);
+
+  console.log("APP", currentUser, token, isUserLoading);
+
   /** Accepts loginData {username, password}
-   * Returns Token if authenticated
-   */
-  async function handleLogin(formData) {
+   * Returns Token if authenticated */
+  async function handleLogin(loginData) {
     try {
-      const apiToken = await JoblyApi.login(formData);
+      const apiToken = await JoblyApi.login(loginData);
       setToken(apiToken);
       return { success: true, errors: null }
     } catch (errors) {
@@ -41,18 +46,18 @@ function App() {
     }
   }
 
-  /** Removes token and currentUser from state */
+  /** Removes token and currentUser from state 
+   * and removes token from local storage */
   function handleLogout() {
     setCurrentUser(null);
     setToken(null);
-    localStorage.removeItem('joblyToken')
+    localStorage.removeItem('joblyToken');
   }
   /** Accepts loginData {username, password}
-   * Returns token if authenticated
-   */
-  async function handleSignup(formData) {
+   * Returns token if authenticated */
+  async function handleSignup(signupData) {
     try {
-      const apiToken = await JoblyApi.registerUser(formData);
+      const apiToken = await JoblyApi.registerUser(signupData);
       setToken(apiToken);
       return { success: true, errors: null }
     } catch (errors) {
@@ -60,37 +65,65 @@ function App() {
     }
   }
 
+  /** On mount and token change -> update JoblyAPI token, 
+   * local storage token, and currentUser */
   useEffect(function updateCurrentUser() {
     async function fetchCurrentUser() {
-      if (token) {
-        try {
-          const { username } = jwt.decode(token)
-          JoblyApi.token = token;
-          localStorage.setItem('joblyToken', token);
-          const localUser = await JoblyApi.getUser(username);
-          setCurrentUser(localUser);
-        }
-        catch {
-          setCurrentUser(null);
-        }
+      try {
+        const { username } = jwt.decode(token)
+        JoblyApi.token = token;
+        localStorage.setItem('joblyToken', token);
+        setIsUserLoading(true);
+        const currentUser = await JoblyApi.getUser(username);
+        setCurrentUser(currentUser);
+        setIsUserLoading(false);
+      }
+      catch {
+        setCurrentUser(null);
+        setIsUserLoading(false);
       }
     }
-    fetchCurrentUser();
+    if (token) fetchCurrentUser();
   }, [token])
 
+  /** Accepts updateData {username, password, firstName, lastName, email}
+  * Returns updated User info if successful */
+  async function handleProfileUpdate(updateData) {
+    try {
+      const updateUser = await JoblyApi.updateUser(updateData);
+      const currentUser = await JoblyApi.getUser(updateUser.username);
+      setCurrentUser(currentUser);
+      return { success: true, errors: null }
+    } catch (errors) {
+      return { success: false, errors: errors }
+    }
+  }
 
-  function handleProfile() { }
+  async function handleApplyJob(username, jobId) {
+    try {
+      const jobApplied = await JoblyApi.applyToJob({username, jobId});
+      setCurrentUser(currentUser => 
+        ({...currentUser, applications: [...currentUser.applications, jobApplied] }));
+      return { success: true, errors: null }
+    } catch (errors) {
+      return { success: false, errors: errors }
+    }
+  }
+
+  if (isUserLoading) return <Spinner animation='border' variant='primary' />
 
   return (
     <div className="App">
       <BrowserRouter>
         <CurrentUserContext.Provider value={currentUser}>
-          <NavBar handleLogout={handleLogout} />
+          <Nav handleLogout={handleLogout} />
+          <ApplyJobContext.Provider value={handleApplyJob}>
           <Routes
             handleLogin={handleLogin}
             handleSignup={handleSignup}
-            handleProfile={handleProfile}
+            handleProfileUpdate={handleProfileUpdate}
           />
+          </ApplyJobContext.Provider>
         </CurrentUserContext.Provider>
       </BrowserRouter>
     </div>
@@ -158,12 +191,7 @@ export default App;
 
 /**
  * TODO:
- * - Add token to localStorage
- * - Protect routes using Context of currentUser
  * - Flesh out components and related API static methods
- * - Add update Profile functionality
  * - Deploy
- * - Clean-up docStrings once state/props/hierarchy
- * - Add Loading message during API calls
- * - Add Alerts
+ * - Look into private routing
  */

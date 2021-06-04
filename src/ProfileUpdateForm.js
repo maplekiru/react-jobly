@@ -1,34 +1,29 @@
 import { React, useState, useContext } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Alert from 'react-bootstrap/Alert';
-import CurrentUserContext from './CurrentUserContext';
-import './SignupForm.css';
+import Alert from 'react-bootstrap/Alert'
+import CurrentUserContext from './CurrentUserContext'
+import './ProfileUpdateForm.css'
 
-
-const initialFormData = {
-  firstName: 'k',
-  lastName: 'r',
-  username: 'testkiru',
-  password: 'password',
-  email: 'k@r.com'
-}
 /**
- * SignupForm
+ * ProfileForm
  * 
  * State: formData
- * Props: handleSignup
+ * Props: handleProfile
  * 
- * Routes --> SignupForm --> Alert
+ * Routes --> ProfileUpdateForm --> Alert
  */
-function SignupForm({ handleSignup }) {
+function ProfileUpdateForm({ handleProfileUpdate }) {
+
+  const currentUser = useContext(CurrentUserContext);
+  const { username, firstName, lastName, email } = currentUser;
+  const initialFormData = { username, firstName, lastName, email, password: '' }
 
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState(null);
 
-  const currentUser = useContext(CurrentUserContext)
   const history = useHistory();
 
   /** Update form input. */
@@ -43,43 +38,29 @@ function SignupForm({ handleSignup }) {
   /** Call parent function and clear form. */
   async function handleSubmit(evt) {
     evt.preventDefault();
-    const signupResult = await handleSignup(formData);
-    if (signupResult.success) {
+    const profileResult = await handleProfileUpdate(formData);
+    if (profileResult.success) {
       history.push('/');
     }
     else {
-      setErrors(signupResult.errors)
+      setErrors(profileResult.errors)
     }
   }
 
-  if (currentUser) return <Redirect to='/'/>
+  console.assert(currentUser, "Should not have gotten here without current user");
 
   return (
-    <Container className='signup-container'>
+    <Container className='profile-container'>
       {errors && errors.map((error, idx) => (
-      <Alert key={idx} variant='danger'> {error} </Alert>))}
-      <h2>Sign Up</h2>
-      <Form className='signup-form'onSubmit={handleSubmit}>
+        <Alert key={idx} variant='danger'> {error} </Alert>))}
+      <h2>Profile</h2>
+      <Form className='profile-form' onSubmit={handleSubmit}>
         <Form.Group controlId="username">
           <Form.Label>Username</Form.Label>
           <Form.Control
-            type="text"
-            name="username"
-            onChange={handleChange}
-            value={formData.username}
-            aria-label="Username"
-            required={true}
-          />
-        </Form.Group>
-        <Form.Group controlId="password">
-          <Form.Label>password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            onChange={handleChange}
-            value={formData.password}
-            aria-label="Password"
-            required={true}
+            plaintext
+            readOnly
+            defaultValue={formData.username}
           />
         </Form.Group>
         <Form.Group controlId="firstName">
@@ -115,9 +96,20 @@ function SignupForm({ handleSignup }) {
             required={true}
           />
         </Form.Group>
-        <Button variant='primary' type='submit'> Signup!</Button>
+        <Form.Group controlId="password">
+          <Form.Label>password</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+            onChange={handleChange}
+            value={formData.password}
+            aria-label="Password"
+            required={true}
+          />
+        </Form.Group>
+        <Button variant='primary' type='submit'> Submit!</Button>
       </Form>
     </Container>
   )
 }
-export default SignupForm;
+export default ProfileUpdateForm;

@@ -6,8 +6,9 @@ import CompanyDetail from './CompanyDetail';
 import JobList from './JobList';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-import ProfileForm from './ProfileForm';
-// TODO: update docstrings for functions / authentication
+import ProfileUpdateForm from './ProfileUpdateForm';
+import PrivateRoute from './PrivateRoute'
+
 /**
  * Routes
  * 
@@ -16,33 +17,30 @@ import ProfileForm from './ProfileForm';
  * App --> Routes --> {HomePage, CompanyList, CompanyDetail
  *                     JobList, LoginForm, SignupForm, ProfileForm}
  */
-function Routes({handleSignup, handleLogin, handleProfile}) {
 
+//TODO: do security requirement do that route
+function Routes({ handleSignup, handleLogin, handleProfileUpdate }) {
+  
+  console.log("ROUTES")
   return (
-      <Switch>
-        <Route exact path='/'>
-          <Homepage/>
-        </Route>
-        <Route exact path='/companies'>
-          <CompanyList/>
-        </Route>
-        <Route exact path='/companies/:name'>
-          <CompanyDetail/>
-        </Route>
-        <Route exact path='/jobs'>
-          <JobList/>
-        </Route>
-        <Route exact path='/login'>
-          <LoginForm handleLogin={handleLogin}/>
-        </Route>
-        <Route exact path='/signup'>
-          <SignupForm handleSignup={handleSignup}/>
-        </Route>
-        <Route exact path='/profile'>
-          <ProfileForm handleProfile={handleProfile}/>
-        </Route>
-        <Redirect to='/' />
-      </Switch>
+    <Switch>
+      <Route exact path='/'>
+        <Homepage />
+      </Route>
+      <PrivateRoute exact path='/companies' component={<CompanyList />} />
+      <PrivateRoute exact path='/companies/:name' component={<CompanyDetail />} />
+      <PrivateRoute exact path='/jobs' component={<JobList />} />
+      <PrivateRoute exact path='/profile'
+        component={<ProfileUpdateForm
+          handleProfileUpdate={handleProfileUpdate} />} />
+      <Route exact path='/login'>
+        <LoginForm handleLogin={handleLogin} />
+      </Route>
+      <Route exact path='/signup'>
+        <SignupForm handleSignup={handleSignup} />
+      </Route>
+      <Redirect to='/' />
+    </Switch>
   )
 }
 

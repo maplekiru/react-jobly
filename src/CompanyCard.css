@@ -1,9 +1,13 @@
-.CompanyCard {
+.CompanyCard a {
     text-decoration: none;
     color: inherit;
 }
 
-.CompanyCard:hover {
-    box-shadow: 0 0 2px;
+.CompanyCard a:hover {
     text-decoration: none;
 }
+
+.CompanyCard:hover {
+    box-shadow: 0 0 2px;
+}
+

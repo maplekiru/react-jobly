@@ -5,3 +5,7 @@
     align-items: center;
     justify-content: center;
 }
+
+#company-detail-container {
+    width:40rem;
+}
