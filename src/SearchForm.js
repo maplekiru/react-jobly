@@ -34,7 +34,7 @@ function SearchForm({ handleSearch }) {
           id="search"
           type="text"
           name="search"
-          placeholder="search"
+          placeholder="Enter search term.."
           onChange={handleChange}
           value={searchTerm}
           aria-label="Search"

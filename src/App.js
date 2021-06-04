@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import './App.css';
 import Routes from './Routes'
-import Nav from './Nav'
+import NavBar from './NavBar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import JoblyApi from './JoblyAPI';
 import CurrentUserContext from "./CurrentUserContext";
@@ -116,7 +116,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <CurrentUserContext.Provider value={currentUser}>
-          <Nav handleLogout={handleLogout} />
+          <NavBar handleLogout={handleLogout} />
           <ApplyJobContext.Provider value={handleApplyJob}>
           <Routes
             handleLogin={handleLogin}

@@ -6,6 +6,7 @@ import './JobList.css';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
+import './Spinner.css';
 
 
 /**
@@ -51,7 +52,12 @@ function JobList() {
     return (errors.map((error, idx) =>
       (<Alert key={idx} variant='danger'> {error} </Alert>)))
   }
-  if (isLoading) return <Spinner animation='border' variant='primary' />
+
+  if (isLoading) return (
+    <div className='d-flex justify-content-center spinner-container'>
+      <Spinner animation='border' variant='primary' />
+    </div>
+  )
 
   return (
     <Container className='JobList'>

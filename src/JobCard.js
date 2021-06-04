@@ -19,9 +19,9 @@ import Alert from 'react-bootstrap/Alert'
  */
 function JobCard({ job }) {
   const currentUser = useContext(CurrentUserContext);
-  const intialState = currentUser.applications.includes(job.id)
+  const intialApplyStatus = currentUser.applications.includes(job.id)
 
-  const [isApplied, setIsApplied] = useState(intialState);
+  const [isApplied, setIsApplied] = useState(intialApplyStatus);
   const [errors, setErrors] = useState(null)
   
   const handleApplyJob = useContext(ApplyJobContext);
@@ -29,7 +29,6 @@ function JobCard({ job }) {
 
   /** handle apply to job button */
   async function handleSubmit(){
-    // TODO: error handling
     const applyResult = await handleApplyJob(currentUser.username, job.id);
     if (applyResult.success) {
       setIsApplied(true)
@@ -41,7 +40,7 @@ function JobCard({ job }) {
   /** handle rendering apply button based on application status */
   function renderApplyButton() {
     if (isApplied) {
-      return <Button variant='success' disabled> Applied </Button>
+      return <Button variant='danger' disabled> Applied </Button>
     }
     return <Button variant='primary' onClick={handleSubmit}> Apply </Button>
   }
@@ -61,7 +60,7 @@ function JobCard({ job }) {
       <Card.Body>
         <Card.Title>{job.title}</Card.Title>
         <Card.Text>Salary: ${job.salary || 0}</Card.Text>
-        <Card.Text>Equity: {job.equity || '0'}</Card.Text>
+        <Card.Text>Equity: {job.equity || 0}</Card.Text>
         {renderApplyButton()}
       </Card.Body>
     </Card>

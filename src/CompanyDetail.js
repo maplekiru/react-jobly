@@ -9,6 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
+import './Spinner.css';
 
 
 /**
@@ -52,7 +53,11 @@ function CompanyDetail() {
     return (errors.map((error, idx) =>
       (<Alert key={idx} variant='danger'> {error} </Alert>)))
   }
-  if (isLoading) return <Spinner animation='border' variant='primary' />
+  if (isLoading) return (
+    <div className='d-flex justify-content-center spinner-container'>
+      <Spinner animation='border' variant='primary' />
+    </div>
+  )
 
 
   function renderCompanyInfo() {

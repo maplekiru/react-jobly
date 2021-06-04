@@ -1,7 +1,7 @@
 import { NavLink, useHistory } from 'react-router-dom';
 import React, { useContext } from "react";
 import CurrentUserContext from "./CurrentUserContext";
-import './Nav.css';
+import './NavBar.css';
 import Button from 'react-bootstrap/Button'
 
 /**
@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button'
  * Context: currentUserContext
  * App --> NavBar
  */
-function Nav({ handleLogout }) {
+function NavBar({ handleLogout }) {
   const currentUser = useContext(CurrentUserContext);
 
   const history = useHistory();
@@ -22,7 +22,7 @@ function Nav({ handleLogout }) {
 
   return (
     <div className='navbar navbar-dark bg-dark NavBar'>
-      <NavLink exact to='/'> Jobly </NavLink>
+      <NavLink  id='logo' exact to='/'> <h4>Jobly </h4> </NavLink>
       {currentUser
         ? <div>
           <NavLink to='/companies'> Companies </NavLink>
@@ -39,4 +39,4 @@ function Nav({ handleLogout }) {
   )
 }
 
-export default Nav;
+export default NavBar;

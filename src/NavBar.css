@@ -6,10 +6,10 @@
     text-decoration: none;  
  }
 .NavBar a.active {
-    color:tomato;
+    color:#dc3545;
 }
 .NavBar a:hover {
-    color:tomato;
+    color:#dc3545;
     text-decoration: none;
 }
 
@@ -19,7 +19,12 @@
  }
 
 .NavBar button:hover {
-    color:tomato;
+    color:#dc3545;
     text-decoration: none;
+}
+
+#logo {
+    color: #dc3545;
+    text-decoration: none; 
 }
 

@@ -13,18 +13,21 @@ import './CompanyCard.css'
  * CompanyList --> CompanyCard
  */
 function CompanyCard({ company }) {
-  const style = {width: '40rem',
-margin: '10px'}
+  const style = {
+    width: '40rem',
+    margin: '10px'
+  }
+
   return (
-        <Card className='CompanyCard' style={style}>
-          <Link  to={`./companies/${company.handle}`}>
-          <Card.Body>
-            <Card.Title>{company.name}</Card.Title>
-            <Card.Text>{company.description}</Card.Text>
-            <Card.Img variant='right' src={company.src} alt=''></Card.Img>
-          </Card.Body>
-          </Link>
-        </Card> 
+    <Card className='CompanyCard' style={style}>
+      <Link to={`./companies/${company.handle}`}>
+        <Card.Body>
+          <Card.Title>{company.name}</Card.Title>
+          <Card.Text>{company.description}</Card.Text>
+          <Card.Img variant='right' src={`${company.logoUrl}`} alt=''></Card.Img>
+        </Card.Body>
+      </Link>
+    </Card>
   )
 }
 export default CompanyCard;
