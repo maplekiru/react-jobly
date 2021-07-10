@@ -3,7 +3,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh
+    min-height: 100vh;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: 50%;
+    background-image: url(./home-background.jpeg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+}
+.HomePage-content{
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 40px;
+    text-align: center;
 }
 
 a {
