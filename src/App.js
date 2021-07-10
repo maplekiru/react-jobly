@@ -133,6 +133,7 @@ function App() {
 export default App;
 
 /**
+ * DRAFT 1 DESIGN NOTES
  * App  Use app as state of truth
  * - BrowserRouter
  *
@@ -191,7 +192,6 @@ export default App;
 
 /**
  * TODO:
- * - Flesh out components and related API static methods
- * - Deploy
- * - Look into private routing
+ * - Flesh out unapplying to job
+ * - clean upp css and design
  */

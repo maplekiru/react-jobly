@@ -19,4 +19,4 @@ function PrivateRoute({ path, component }) {
 
 export default PrivateRoute
 
-// useChildren props vs. component
+// TODO: useChildren props vs. component
